@@ -5,5 +5,7 @@ faiss-cpu
 langchain-community
 langchain_google_genai
 PyPDF2
+InstructorEmbedding
+sentence-transformers
 
 
