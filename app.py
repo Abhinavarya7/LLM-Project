@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 load_dotenv()
 os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-
+INDEX_PATH = "faiss_index"
 
 # Extract text content from a list of uploaded PDF documents
 def get_pdf_text(pdf_docs):
@@ -63,8 +63,11 @@ def get_vector_store(text_chunks):
     """
     model_name = "all-MiniLM-L6-v2"
     embeddings = HuggingFaceEmbeddings(model_name=model_name)
-    vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
-    vector_store.save_local("faiss_index")
+    if os.path.exists(INDEX_PATH):
+        vector_store = FAISS.load_local(INDEX_PATH, embeddings, allow_dangerous_deserialization=True)
+    else:
+        vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
+        vector_store.save_local("faiss_index")
     # vector_store.save_local("faisss_index")
     return vector_store
 
@@ -108,9 +111,11 @@ def user_input(user_question, processed_pdf_text):
         The generated response from the conversational chain.
     """
 
-    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-    new_db = FAISS.load_local("faiss_index", embeddings)
-    docs = new_db.similarity_search(user_question)
+    vector_store = st.session_state.get("vector_store")
+    if not vector_store:
+        st.error("Vector store not found. Please upload and process PDFs first.")
+        return
+    docs = vector_store.similarity_search(user_question)
 
     chain = get_conversional_chain()
 
@@ -130,7 +135,6 @@ def main():
 
     st.set_page_config("Chat With Multiple PDF")
     st.header("Chat with PDF's powered by HuggingFace 🙋‍♂️ Abhinav's Project")
-
     user_question = st.text_input("Ask a Question from the PDF Files")
 
     if user_question:
@@ -175,6 +179,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
