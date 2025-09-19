@@ -51,7 +51,7 @@ def get_text_chunks(text):
         A list of text chunks.
     """
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=3000, chunk_overlap=500)
     chunks = text_splitter.split_text(text)
     return chunks
 
@@ -179,6 +179,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
