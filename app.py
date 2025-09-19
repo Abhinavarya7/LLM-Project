@@ -2,7 +2,7 @@ import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 import google.generativeai as genai
 from langchain_community.vectorstores import FAISS
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -63,7 +63,7 @@ def get_vector_store(text_chunks):
         A FAISS vector store.
     """
 
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    embeddings = HuggingFaceEmbeddings(mode_name="all-MiniLM-L6-v2")
     vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
     vector_store.save_local("faisss_index")
     return vector_store
@@ -108,7 +108,7 @@ def user_input(user_question, processed_pdf_text):
         The generated response from the conversational chain.
     """
 
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     new_db = FAISS.load_local("faisss_index", embeddings)
     docs = new_db.similarity_search(user_question)
 
@@ -129,7 +129,7 @@ def main():
     """
 
     st.set_page_config("Chat With Multiple PDF")
-    st.header("Chat with PDF's powered by Gemini 🙋‍♂️")
+    st.header("Chat with PDF's powered by HuggingFace 🙋‍♂️ Abhinav's Project")
 
     user_question = st.text_input("Ask a Question from the PDF Files")
 
@@ -175,4 +175,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
