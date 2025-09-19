@@ -1,7 +1,6 @@
-# Gemini PDF Question Answering System
+# HuggingFace PDF Question Answering System
 
-### This Streamlit app let's users upload, process multiple PDFs, and ask questions on the content using a conversational chat powered by Google's Gemini-pro.
-
+### This Streamlit app let's users upload, process multiple PDFs, and ask questions on the content using a conversational chat powered by HuggingFace.
 ## Prerequisites
 * Python 3.10 or higher
 * Streamlit
@@ -9,6 +8,8 @@
 * Langchain
 * Google Generative AI
 * Google Cloud SDK
+* Langchain-community
+* sentence-transformers
 
 ## Installation
 1. Clone this repository to your local machine.
