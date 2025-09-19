@@ -55,15 +55,10 @@ def get_text_chunks(text):
 def get_vector_store(text_chunks):
     """
     Creates a vector store from a list of text chunks.
-
-    Args:
-        text_chunks: A list of text chunks.
-
-    Returns:
-        A FAISS vector store.
+    
     """
 
-    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
     vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
     vector_store.save_local("faisss_index")
     return vector_store
@@ -175,6 +170,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
