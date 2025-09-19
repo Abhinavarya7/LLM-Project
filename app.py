@@ -2,8 +2,11 @@ import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from langchain_community.embeddings import HuggingFaceEmbeddings
+# from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from InstructorEmbedding import INSTRUCTOR
+from langchain.embeddings import HuggingFaceInstructEmbeddings
+from langchain.vectorstores import FAISS
+# from langchain_community.embeddings import HuggingFaceEmbeddings
 import google.generativeai as genai
 from langchain_community.vectorstores import FAISS
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -58,10 +61,10 @@ def get_vector_store(text_chunks):
     Creates a vector store from a list of text chunks.
     
     """
-
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    model_name = "hkunlp/instructor-small"
+    embeddings = HuggingFaceInstructEmbeddings(model_name=model_name)
     vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
-    vector_store.save_local("faisss_index")
+    # vector_store.save_local("faisss_index")
     return vector_store
 
 # Define a prompt template to answer questions based on provided context
@@ -171,6 +174,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
