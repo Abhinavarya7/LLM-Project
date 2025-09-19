@@ -7,4 +7,5 @@ langchain_google_genai
 PyPDF2
 langchain-community
 torch
+transformers
 
