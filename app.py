@@ -115,16 +115,22 @@ def user_input(user_question, processed_pdf_text):
     if not vector_store:
         st.error("Vector store not found. Please upload and process PDFs first.")
         return
-    docs = vector_store.similarity_search(user_question)
 
-    chain = get_conversional_chain()
+    with st.spinner("Searching for answer..."):
+        docs = vector_store.similarity_search(user_question)
+
+    chain = st.session_state.get("chain")
+    if not chain:
+        chain = get_conversational_chain()
+        st.session_state["chain"] = chain
 
     # Combine user question and processed PDF text as context
-    context = f"{processed_pdf_text}\n\nQuestion: {user_question}"
+    # context = f"{processed_pdf_text}\n\nQuestion: {user_question}"
 
+    context = "\n\n".join([doc.page_content for doc in docs])
     response = chain({"input_documents": docs, "question": user_question, "context": context}, return_only_outputs=True)
 
-    print(response)
+    # print(response)
     st.write("Reply: ", response["output_text"])
 
 # Main Streamlit app function to set up UI and handle user interactions
@@ -179,6 +185,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
