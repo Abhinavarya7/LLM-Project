@@ -64,7 +64,8 @@ def get_vector_store(text_chunks):
     model_name = "all-MiniLM-L6-v2"
     embeddings = HuggingFaceEmbeddings(model_name=model_name)
     vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
-    vector_store.save_local("faisss_index")
+    vector_store.save_local("faiss_index")
+    # vector_store.save_local("faisss_index")
     return vector_store
 
 # Define a prompt template to answer questions based on provided context
@@ -108,7 +109,7 @@ def user_input(user_question, processed_pdf_text):
     """
 
     embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-    new_db = FAISS.load_local("faisss_index", embeddings)
+    new_db = FAISS.load_local("faiss_index", embeddings)
     docs = new_db.similarity_search(user_question)
 
     chain = get_conversional_chain()
@@ -174,6 +175,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
