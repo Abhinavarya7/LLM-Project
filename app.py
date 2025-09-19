@@ -2,6 +2,7 @@ import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.embeddings import HuggingFaceEmbeddings
 import google.generativeai as genai
 from langchain_community.vectorstores import FAISS
@@ -170,6 +171,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
